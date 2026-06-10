@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="680" height="980" viewBox="0 0 680 980"
+     xmlns="http://www.w3.org/2000/svg"
+     font-family="Arial, Helvetica, sans-serif">
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+
+    <!-- Color fills -->
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #1a1a1a; }
+      .title { font-size: 15px; font-weight: 700; }
+      .label { font-size: 13px; font-weight: 700; }
+      .sub   { font-size: 11px; font-weight: 400; fill: #3d3d3a; }
+      .sec   { font-size: 11px; font-weight: 400; fill: #73726c; }
+      .arr   { stroke: #73726c; stroke-width: 1.2; fill: none; marker-end: url(#arrow); }
+      .merge { stroke: #b4b2a9; stroke-width: 1; fill: none; }
+      .dash  { stroke: #b4b2a9; stroke-width: 1; fill: none; stroke-dasharray: 4 4; marker-end: url(#arrow); }
+
+      /* coral */
+      .coral-fill { fill: #FAECE7; stroke: #993C1D; stroke-width: 0.8; }
+      .coral-title { fill: #712B13; font-size: 13px; font-weight: 700; }
+      .coral-sub   { fill: #993C1D; font-size: 11px; }
+
+      /* teal */
+      .teal-fill  { fill: #E1F5EE; stroke: #0F6E56; stroke-width: 0.8; }
+      .teal-title { fill: #085041; font-size: 13px; font-weight: 700; }
+      .teal-sub   { fill: #0F6E56; font-size: 11px; }
+
+      /* purple */
+      .purple-fill  { fill: #EEEDFE; stroke: #534AB7; stroke-width: 0.8; }
+      .purple-title { fill: #3C3489; font-size: 13px; font-weight: 700; }
+      .purple-sub   { fill: #534AB7; font-size: 11px; }
+
+      /* blue */
+      .blue-fill  { fill: #E6F1FB; stroke: #185FA5; stroke-width: 0.8; }
+      .blue-title { fill: #0C447C; font-size: 13px; font-weight: 700; }
+      .blue-sub   { fill: #185FA5; font-size: 11px; }
+
+      /* gray */
+      .gray-fill  { fill: #F1EFE8; stroke: #5F5E5A; stroke-width: 0.8; }
+      .gray-title { fill: #444441; font-size: 13px; font-weight: 700; }
+      .gray-sub   { fill: #5F5E5A; font-size: 11px; }
+
+      /* pill purple */
+      .pill-purple { fill: #EEEDFE; stroke: #534AB7; stroke-width: 0.5; }
+      .pill-purple-text { fill: #3C3489; font-size: 10px; font-weight: 400; }
+
+      /* pill blue */
+      .pill-blue { fill: #E6F1FB; stroke: #185FA5; stroke-width: 0.5; }
+      .pill-blue-text { fill: #0C447C; font-size: 10px; font-weight: 400; }
+
+      /* container */
+      .container { fill: #f8f8f6; stroke: #b4b2a9; stroke-width: 1; }
+
+      /* implication */
+      .impl { font-size: 11px; font-weight: 400; fill: #5F5E5A; }
+    </style>
+  </defs>
+
+  <!-- ─── TITLE ─────────────────────────────────────────────────── -->
+  <text class="title" x="340" y="22" text-anchor="middle">Chromatin reasoning agent — architecture blueprint</text>
+
+  <!-- ─── THE GAP ───────────────────────────────────────────────── -->
+  <text class="sec" x="340" y="40" text-anchor="middle">The gap — why this must be built</text>
+
+  <!-- Gap box 1: Frontier AI -->
+  <rect class="coral-fill" x="40" y="50" width="175" height="60" rx="8"/>
+  <text class="coral-title" x="127" y="73" text-anchor="middle">Frontier AI models</text>
+  <text class="coral-sub"   x="127" y="92" text-anchor="middle">Hallucinate; no source tracing</text>
+
+  <!-- Gap box 2: Databases -->
+  <rect class="coral-fill" x="252" y="50" width="175" height="60" rx="8"/>
+  <text class="coral-title" x="339" y="73" text-anchor="middle">Specialist databases</text>
+  <text class="coral-sub"   x="339" y="92" text-anchor="middle">Static; cannot reason at all</text>
+
+  <!-- Gap box 3: No tool -->
+  <rect class="coral-fill" x="464" y="50" width="175" height="60" rx="8"/>
+  <text class="coral-title" x="551" y="73" text-anchor="middle">No reliable tool exists</text>
+  <text class="coral-sub"   x="551" y="92" text-anchor="middle">Context-blind by design</text>
+
+  <text class="sec" x="340" y="120" text-anchor="middle">No autonomous reasoning system for chromatin biology within defined experimental context</text>
+
+  <!-- Arrow 1 -->
+  <line class="arr" x1="340" y1="129" x2="340" y2="142" marker-end="url(#arrow)"/>
+
+  <!-- ─── QUERY INPUT ────────────────────────────────────────────── -->
+  <rect class="teal-fill" x="120" y="148" width="440" height="54" rx="8"/>
+  <text class="teal-title" x="340" y="168" text-anchor="middle">Experimental query input</text>
+  <text class="teal-sub"   x="340" y="188" text-anchor="middle">Unexpected result in ChIP-seq — what mechanism explains this in my specific system?</text>
+
+  <!-- Arrow 2 -->
+  <line class="arr" x1="340" y1="202" x2="340" y2="216" marker-end="url(#arrow)"/>
+
+  <!-- ─── CONTEXT INTEGRATION ───────────────────────────────────── -->
+  <rect class="container" x="40" y="222" width="600" height="150" rx="10"/>
+  <text class="label" x="340" y="244" text-anchor="middle">18+ parameter context integration</text>
+  <text class="sub"   x="340" y="262" text-anchor="middle">Each parameter = probability distribution over documented molecular consequences · human &amp; Drosophila only</text>
+
+  <!-- Pills row 1 (purple) -->
+  <rect class="pill-purple" x="64"  y="274" width="82"  height="22" rx="11"/>
+  <text class="pill-purple-text" x="105" y="286" text-anchor="middle">Cell cycle</text>
+
+  <rect class="pill-purple" x="154" y="274" width="104" height="22" rx="11"/>
+  <text class="pill-purple-text" x="206" y="286" text-anchor="middle">Metabolic state</text>
+
+  <rect class="pill-purple" x="266" y="274" width="80"  height="22" rx="11"/>
+  <text class="pill-purple-text" x="306" y="286" text-anchor="middle">Tissue type</text>
+
+  <rect class="pill-purple" x="354" y="274" width="72"  height="22" rx="11"/>
+  <text class="pill-purple-text" x="390" y="286" text-anchor="middle">Organism</text>
+
+  <rect class="pill-purple" x="434" y="274" width="108" height="22" rx="11"/>
+  <text class="pill-purple-text" x="488" y="286" text-anchor="middle">Developmental</text>
+
+  <!-- Pills row 2 (blue) -->
+  <rect class="pill-blue" x="64"  y="303" width="116" height="22" rx="11"/>
+  <text class="pill-blue-text" x="122" y="315" text-anchor="middle">Disease/mutation</text>
+
+  <rect class="pill-blue" x="188" y="303" width="100" height="22" rx="11"/>
+  <text class="pill-blue-text" x="238" y="315" text-anchor="middle">Enviro. stress</text>
+
+  <rect class="pill-blue" x="296" y="303" width="112" height="22" rx="11"/>
+  <text class="pill-blue-text" x="352" y="315" text-anchor="middle">Phase separation</text>
+
+  <rect class="pill-blue" x="416" y="303" width="108" height="22" rx="11"/>
+  <text class="pill-blue-text" x="470" y="315" text-anchor="middle">Chrom. memory</text>
+
+  <text class="sub" x="340" y="342" text-anchor="middle">+ 10 more · cross-parameter dependencies explicitly encoded (M-phase overrides; hypoxia × IDH compound)</text>
+  <text class="sub" x="340" y="360" text-anchor="middle">Joint constraint filter reduces hypothesis space 60–80% before reasoning begins</text>
+
+  <!-- Arrow 3 -->
+  <line class="arr" x1="340" y1="376" x2="340" y2="390" marker-end="url(#arrow)"/>
+
+  <!-- ─── EPISTEMIC COMPLETENESS CHECKER ───────────────────────── -->
+  <rect class="blue-fill" x="80" y="396" width="520" height="54" rx="8"/>
+  <text class="blue-title" x="340" y="416" text-anchor="middle">Epistemic completeness checker</text>
+  <text class="blue-sub"   x="340" y="436" text-anchor="middle">Audits query before reasoning · flags unspecified parameters · recommends measurements to collapse uncertainty</text>
+
+  <!-- Arrow 4 -->
+  <line class="arr" x1="340" y1="454" x2="340" y2="468" marker-end="url(#arrow)"/>
+
+  <!-- ─── KNOWLEDGE ARCHITECTURE ────────────────────────────────── -->
+  <!-- Left: Chromatin consequence graph -->
+  <rect class="purple-fill" x="40" y="474" width="285" height="72" rx="8"/>
+  <text class="purple-title" x="182" y="496" text-anchor="middle">Chromatin consequence graph</text>
+  <text class="purple-sub"   x="182" y="514" text-anchor="middle">Database-verified · organism-specific</text>
+  <text class="purple-sub"   x="182" y="530" text-anchor="middle">Evidence quality scored per edge</text>
+
+  <!-- Right: Parameter interaction graph -->
+  <rect class="blue-fill" x="355" y="474" width="285" height="72" rx="8"/>
+  <text class="blue-title" x="497" y="496" text-anchor="middle">Parameter interaction graph</text>
+  <text class="blue-sub"   x="497" y="514" text-anchor="middle">Cross-parameter dependencies encoded</text>
+  <text class="blue-sub"   x="497" y="530" text-anchor="middle">M-phase, hypoxia, IDH interactions</text>
+
+  <!-- Merge lines -->
+  <path class="merge" d="M 182 546 L 182 562 L 340 562"/>
+  <path class="merge" d="M 497 546 L 497 562 L 340 562"/>
+  <line class="arr" x1="340" y1="562" x2="340" y2="576" marker-end="url(#arrow)"/>
+
+  <!-- ─── BIDIRECTIONAL REASONING ────────────────────────────────── -->
+  <rect class="purple-fill" x="40" y="582" width="600" height="72" rx="8"/>
+  <text class="purple-title" x="340" y="604" text-anchor="middle">Bidirectional reasoning engine</text>
+  <text class="purple-sub"   x="340" y="622" text-anchor="middle">Forward: signal → chromatin · kinase phosphorylation, metabolic coupling, remodeller deployment</text>
+  <text class="purple-sub"   x="340" y="638" text-anchor="middle">Reverse: chromatin → signal · gene silencing, feedback loops, non-transcriptional mechanisms</text>
+
+  <!-- Arrow 5 -->
+  <line class="arr" x1="340" y1="656" x2="340" y2="670" marker-end="url(#arrow)"/>
+
+  <!-- ─── SCORING ───────────────────────────────────────────────── -->
+  <rect class="blue-fill" x="40" y="676" width="600" height="66" rx="8"/>
+  <text class="blue-title" x="340" y="698" text-anchor="middle">Scoring and uncertainty quantification</text>
+  <text class="blue-sub"   x="340" y="716" text-anchor="middle">Bayesian joint probability · Conformal prediction · Shannon entropy (ambiguity quantification)</text>
+  <text class="blue-sub"   x="340" y="730" text-anchor="middle">Signal fidelity via conditional mutual information · Uncertainty propagated architecturally throughout</text>
+
+  <!-- Arrow 6 -->
+  <line class="arr" x1="340" y1="744" x2="340" y2="758" marker-end="url(#arrow)"/>
+
+  <!-- ─── OUTPUT ────────────────────────────────────────────────── -->
+  <!-- Left: Ranked hypotheses -->
+  <rect class="teal-fill" x="40" y="764" width="285" height="88" rx="8"/>
+  <text class="teal-title" x="182" y="784" text-anchor="middle">Ranked hypotheses</text>
+  <text class="teal-sub"   x="182" y="801" text-anchor="middle">Calibrated confidence scores</text>
+  <text class="teal-sub"   x="182" y="816" text-anchor="middle">Epistemic labels (confirmed/inferred)</text>
+  <text class="teal-sub"   x="182" y="831" text-anchor="middle">Source-traced, auditable output</text>
+
+  <!-- Right: Experiment recommendations -->
+  <rect class="teal-fill" x="355" y="764" width="285" height="88" rx="8"/>
+  <text class="teal-title" x="497" y="784" text-anchor="middle">Experiment recommendations</text>
+  <text class="teal-sub"   x="497" y="801" text-anchor="middle">Ranked by information gain</text>
+  <text class="teal-sub"   x="497" y="816" text-anchor="middle">Assay, timepoints, controls specified</text>
+  <text class="teal-sub"   x="497" y="831" text-anchor="middle">Positive and negative predictions</text>
+
+  <!-- Dashed future arrow -->
+  <line class="dash" x1="340" y1="856" x2="340" y2="872" marker-end="url(#arrow)"/>
+
+  <!-- Future label -->
+  <text class="sec" x="340" y="880" text-anchor="middle">Future scope</text>
+
+  <!-- ─── FUTURE SCOPE ──────────────────────────────────────────── -->
+  <rect class="gray-fill" x="40"  y="890" width="175" height="60" rx="8"/>
+  <text class="gray-title" x="127" y="912" text-anchor="middle">Learned embeddings</text>
+  <text class="gray-sub"   x="127" y="930" text-anchor="middle">Single-cell multi-omics</text>
+
+  <rect class="gray-fill" x="252" y="890" width="175" height="60" rx="8"/>
+  <text class="gray-title" x="339" y="912" text-anchor="middle">Probabilistic model</text>
+  <text class="gray-sub"   x="339" y="930" text-anchor="middle">Dynamic ODE modelling</text>
+
+  <rect class="gray-fill" x="464" y="890" width="175" height="60" rx="8"/>
+  <text class="gray-title" x="551" y="912" text-anchor="middle">V2V integration</text>
+  <text class="gray-sub"   x="551" y="930" text-anchor="middle">GWAS locus → mechanism</text>
+
+  <!-- Implication -->
+  <text class="impl" x="340" y="966" text-anchor="middle">Trustworthy · auditable · source-traced AI for specialist chromatin biology</text>
+
+</svg>
