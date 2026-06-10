@@ -65,6 +65,9 @@ The **Bidirectional Reasoning Engine** traverses the knowledge graph in both the
 
 The **Scoring Framework** integrates Bayesian joint probability scoring with conformal prediction and entropy balancing to produce calibrated confidence guarantees. Shannon entropy of the hypothesis score distribution quantifies the remaining ambiguity and directly determines the information gain ranking of experimental recommendations.
 
+![Architecture blueprint](figures/architecture_blueprint.svg)
+
+
 ---
 
 ## Current status
