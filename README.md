@@ -1,135 +1,105 @@
-# EpiSignal — Context-Aware Mechanistic Reasoning Agent for Chromatin Biology
+# EpiSignal
 
-**Status: Architecture and framework in active development**
-**Author: Mujtaba Ahmed | Tariq Lab, LUMS**
+**Context-aware mechanistic reasoning agent for chromatin biology**
 
----
-
-## What this is
-
-EpiSignal is a domain-specific reasoning system I am building to address a gap I kept running into directly in my own chromatin biology research: when a ChIP-seq experiment returns a surprising result, there is no tool that reasons mechanistically about what caused it given your specific experimental context — organism, cell type, metabolic state, disease background, and cell cycle stage all at once.
-
-Frontier AI models like GPT-4 and Claude will answer chromatin biology questions, but they hallucinate mechanisms confidently, apply cross-organism analogies without conservation evidence, and cannot distinguish confirmed facts from plausible inventions. Specialist databases like STRING, PhosphoSitePlus, and Reactome are comprehensive but they do not reason — they are lookup tools, not inference systems. The researcher is left alone with an anomalous result and no structured way to move from observation to ranked, testable mechanistic hypothesis.
-
-EpiSignal is designed to fill that gap.
+Status: Architecture and framework in active development
+Author: Mujtaba Ahmed, Tariq Lab, LUMS
 
 ---
 
-## The core problem it solves
+## Background and motivation
 
-Standard tools treat chromatin as a downstream output of signalling. EpiSignal reasons in both directions:
+This project came out of a practical problem I encountered repeatedly during my research. When a ChIP-seq experiment returns an unexpected result, there is no computational tool that helps you reason through what caused it given your actual experimental conditions. You can query STRING or PhosphoSitePlus for interaction data, you can browse Reactome for pathway context, and you can ask a general-purpose AI model and receive a confident, fluent answer that mixes confirmed mechanisms with plausible inventions in a way that is genuinely difficult to untangle. None of these is what you actually need, which is a system that takes your specific observation and your specific context and produces ranked, mechanistically grounded hypotheses you can actually test.
 
-- **Forward chain** (signal → chromatin): how do kinase activation, metabolic shifts, and remodeller deployment drive histone modification changes
-- **Reverse chain** (chromatin → signal): how do chromatin state changes at specific loci feed back to regulate signalling pathway activity, gene expression of pathway components, and cell fate decisions
+The deeper problem is that all existing tools are built around the same assumption: signalling is upstream and chromatin is downstream. The entire architecture of STRING, Reactome, and PhosphoSitePlus reflects this. It is a real biological oversimplification. Chromatin state actively regulates signalling pathway activity through multiple well-documented mechanisms, including transcriptional control of pathway genes, non-transcriptional modification of kinase-proximal proteins, and feedback loops where chromatin-driven gene expression changes amplify or suppress the same signals that drove the chromatin change in the first place. A tool that cannot reason in both directions is architecturally incomplete for the questions chromatin biologists actually ask.
 
-No existing tool models this bidirectionality systematically. The reverse chain — where chromatin state is an upstream regulator of signalling — is almost entirely absent from current computational tools, yet it is mechanistically real and biologically critical. PTEN silencing by H3K27me3 constitutively activating PI3K/AKT is one example. BALL-mediated H2AT119ph opposing PRC1 occupancy in Drosophila, with downstream consequences for TAD boundary insulation, is another and forms the direct connection to my experimental work in the Tariq Lab.
-
----
-
-## Current stage
-
-This repository contains the architectural framework and design documentation. I am at the conceptual and systems design stage — the intellectual work of defining what the system needs to do, why existing approaches fall short, and how the reasoning architecture should be structured.
-
-The design has gone through several rounds of critical revision, including:
-
-- Identifying that 11 parameters are insufficient and the parameter system should encode probability distributions, not categorical labels
-- Recognising that cross-parameter interactions (hypoxia compounding with IDH mutation on JmjC activity; M-phase overriding transcription regardless of other active pathways) must be explicitly encoded, not inferred
-- Proposing a Cellular State Consequence Map architecture to capture chromatin-relevant consequences of complete cell biology without requiring whole-cell simulation
-- Designing an Epistemic Completeness Checker that audits every query before reasoning begins and turns knowledge gaps into explicit experimental recommendations
-- Scoping deliberately to human and Drosophila only to ensure depth over false breadth
-
-Implementation is the planned next phase.
-
----
-
-## Repository structure
-
-```
-EpiSignal-ChromatinReasoning/
-│
-├── README.md                          ← this file
-│
-├── architecture/
-│   ├── EpiSignal_Architecture_Document_v1.md   ← 19-section full architecture
-│   └── system_prompt_v1.md                     ← reasoning agent system prompt
-│
-├── framework/
-│   ├── parameter_framework.md         ← 18+ parameter context integration design
-│   ├── knowledge_graph_design.md      ← Chromatin Consequence Knowledge Graph spec
-│   └── scoring_framework.md           ← Bayesian + conformal prediction design
-│
-└── figures/
-    └── architecture_blueprint.svg     ← visual flowchart of the full pipeline
-```
-
----
-
-## Core architecture components
-
-### 1. Chromatin Consequence Knowledge Graph
-
-A structured knowledge graph where each node is a biological state (a cell cycle phase, a metabolic condition, a specific chromatin modification) and each edge encodes a chromatin-relevant consequence with:
-
-- Organism-specific tags (human vs Drosophila — no unqualified cross-species extrapolation)
-- Evidence quality scores based on experimental method, replication count, and recency
-- Severity-dependent weights (moderate hypoxia vs severe hypoxia produce quantitatively different JmjC demethylase activity)
-
-The graph is intentionally scoped to human and Drosophila first. Depth and experimental honesty before breadth.
-
-### 2. Parameter Interaction Graph
-
-A curated set of explicitly encoded cross-parameter dependencies — the interactions that make real biological systems behave in ways that single-parameter lookup cannot predict:
-
-- M-phase transcriptional silencing overrides all other pathway activity states
-- Hypoxia and IDH mutation compound multiplicatively on JmjC demethylase inhibition, not additively
-- Metabolic state and cell cycle interact on shared chromatin targets through overlapping cofactor dependencies
-
-These are not derived by inference — they are encoded as known biological facts, each with a source.
-
-### 3. Epistemic Completeness Checker
-
-Before reasoning begins, the system audits the user's query against the knowledge graph, identifies which parameters are unspecified or poorly characterised in the available literature, and outputs explicit recommendations for what to measure. This turns incomplete knowledge from a hidden flaw into actionable experimental guidance.
-
-A researcher asking about H3K27me3 dynamics in a hypoxic cancer cell line without specifying IDH status, oxygen concentration, or cell cycle synchronisation will be told exactly what additional information would most collapse the mechanistic uncertainty — before a potentially wrong hypothesis is confidently returned.
-
-### 4. Uncertainty propagation
-
-Every output carries confidence distributions reflecting both hypothesis uncertainty and parameter uncertainty simultaneously. The system is explicitly honest about what is well-characterised versus inferred. Mechanisms from Drosophila applied to human queries receive a quantified cross-organism prior. Mechanisms from bulk assay data are flagged when single-cell resolution would change the interpretation.
-
-### 5. Bidirectional scoring
-
-Bayesian joint probability scoring with evidence-weighted adjustment factors, integrated with conformal prediction and entropy balancing for calibrated confidence guarantees. Shannon entropy quantifies residual ambiguity and directly drives the experiment recommendation — the highest-information experiment is the one that most efficiently collapses the entropy of the hypothesis distribution.
+EpiSignal is designed to reason in both directions, within a defined biological context, with calibrated confidence, and with full source tracing on every claim it makes.
 
 ---
 
 ## Connection to experimental work
 
-This project grew directly out of my work in the Tariq Lab on Ballchen (BALL), the Drosophila H2A T119 kinase and Trithorax group protein. The BALL system is a primary validation case for EpiSignal because it is a genuine bidirectional node:
+The immediate motivation for this project is my ongoing work on Ballchen (BALL), the Drosophila H2A threonine 119 kinase and Trithorax group protein, in the Tariq Lab at LUMS. BALL is a genuine bidirectional regulatory node and a useful validation case for the kind of reasoning EpiSignal is designed to support.
 
-- **Forward**: upstream signalling activates BALL → H2AT119ph at PRE-proximal loci → displacement of dRING/PRC1 → reduced H2AK118ub1 → derepression of Polycomb target genes
-- **Reverse (EpiSignal-generated hypothesis)**: H2AT119ph enrichment at TAD boundary regions may regulate loop extrusion and boundary insulation → affecting which enhancer-promoter pairs are in proximity → controlling signalling gene accessibility → feeding back to the signalling state of the cell
+In the forward direction, BALL phosphorylates H2A at T119 at PRE-proximal loci, displacing the PRC1 E3 ligase dRING from the nucleosome acidic patch, reducing H2AK118 ubiquitination, and contributing to derepression of Polycomb target genes. My ChIP-seq data from S2 cells shows that BALL predominantly localises at insulator elements, co-occupying sites with dCTCF, CP190, and BEAF-32, which raises the question of whether BALL-mediated H2AT119 phosphorylation at TAD boundary regions affects loop extrusion and boundary insulation independently of its role at PRE-proximal loci.
 
-My ChIP-seq data showing Ballchen predominantly localising at insulator elements (dCTCF, CP190, BEAF-32 co-occupancy) is directly relevant to testing this reverse-chain prediction. Hi-C in ball-depleted S2 cells is the experiment EpiSignal would recommend first.
+That question is a reverse-chain question. If H2AT119 phosphorylation density at TAD boundaries regulates boundary insulation, then the chromatin modification state is upstream of the three-dimensional genome organisation, which in turn controls which enhancer-promoter pairs are in proximity, which determines the expression of signalling pathway genes, which feeds back to the signalling state of the cell. Reasoning through that chain systematically, with organism-specific evidence, organism-appropriate priors, and a ranked experimental recommendation, is precisely what EpiSignal is built to do. Hi-C in BALL-depleted Drosophila S2 cells is the experiment the system would recommend first for testing this hypothesis.
 
 ---
 
-## Why this matters now
+## Why this gap exists now
 
-Frontier AI models are already being used by researchers to reason about chromatin mechanisms. They produce confident, fluent, and partially incorrect answers with no way to distinguish which parts are wrong. The problem is not that researchers are using AI — they are going to use it regardless. The problem is that the AI assistance available to them is untrustworthy for specialist biology at a moment when it could be genuinely useful if built correctly.
+Frontier AI models are already being used by researchers to reason about chromatin biology. The use is happening regardless of whether the tools are reliable enough to support it. The problem is that models like GPT-4 and Claude produce syntactically expert, biologically fluent answers that are partially wrong in ways that are very difficult to detect without deep domain knowledge of the specific mechanism being discussed. The hallucination is not obvious. It sounds like a knowledgeable colleague.
 
-EpiSignal is designed to make AI-assisted reasoning in chromatin biology auditable and trustworthy: every claim source-traced, every cross-organism extrapolation explicitly qualified, every confidence score calibrated, every knowledge gap surfaced rather than papered over.
+The specific failure modes are consistent and predictable: incorrect cross-organism extrapolation applied without conservation evidence, outdated mechanistic consensus presented as settled, enzyme-substrate relationships that do not exist in the relevant organism stated confidently, and no quantitative effect sizes reported alongside mechanistic claims. These are not random errors. They reflect the structural limitations of a general-purpose language model applied to a domain where the relevant evidence is scattered across dozens of specialist databases, where context specificity is biologically critical, and where the difference between a correct and an incorrect hypothesis can determine whether six months of experiments produce meaningful data.
+
+EpiSignal addresses this by encoding source tracing, organism-specific evidence weighting, and calibrated uncertainty quantification as architectural requirements rather than optional features.
+
+---
+
+## Core design principles
+
+**Source tracing as a requirement, not a feature.** Every mechanistic claim in an EpiSignal output is linked to a specific database record or publication. Claims without database support are labelled explicitly as predicted or speculative. There is no mechanism by which the system can produce a confident unsourced assertion.
+
+**Organism discipline.** A mechanism established in Drosophila S2 cells is not assumed to apply in human cells without documented conservation evidence. Cross-organism priors are quantified, stated explicitly, and adjusted based on the available evidence for ortholog identity, domain conservation, and functional equivalence. The base prior for applying a Drosophila mechanism to a human query is low and must be raised by evidence, not assumed.
+
+**Parameters as probability distributions.** Each of the 18+ context parameters the system loads is treated as a probability distribution over documented molecular consequences, not a categorical label. Hypoxia is not a flag that turns on HIF1-alpha. It is a distribution over oxygen concentrations, alpha-KG depletion levels, TCA cycle activity states, and AMPK activation levels, each with different chromatin consequences at different severities. Where the user has measured these directly, the distribution is narrow. Where they have not, it is wide, and the output reflects that width explicitly.
+
+**Cross-parameter interactions encoded explicitly.** The most important sources of false precision in existing tools are unacknowledged parameter interactions. M-phase transcriptional silencing overrides all other pathway activity states regardless of what signalling is happening. Hypoxia and IDH mutation inhibit JmjC demethylase activity through independent mechanisms whose effects compound multiplicatively, not additively. These interactions are encoded as explicit dependencies in the Parameter Interaction Graph, not inferred on the fly.
+
+**Uncertainty surfaced, not hidden.** The Epistemic Completeness Checker audits every query before reasoning begins, identifies which parameters are unspecified or poorly characterised, and outputs specific measurement recommendations. A researcher querying H3K27me3 dynamics in a cancer cell line without specifying IDH mutation status or oxygen concentration is told what to measure before a potentially misleading ranking is returned. The goal is to make the system's limitations visible and actionable rather than invisible and dangerous.
+
+---
+
+## Architecture overview
+
+The full architecture is described in detail in the documents in this repository. The core components are as follows.
+
+The **Chromatin Consequence Knowledge Graph** encodes biological states as sub-graphs of documented molecular consequences. Each node corresponds to a biological entity or state with an organism tag. Each edge carries a mechanism type annotation, an evidence quality score derived from experimental method and replication count, and a severity-dependent weight where relevant. The graph is deliberately scoped to human and Drosophila for the initial build.
+
+The **Parameter Interaction Graph** is a curated set of known cross-parameter dependencies for the core 18+ parameters, covering the interactions where treating parameters as independent produces qualitatively wrong outputs.
+
+The **Epistemic Completeness Checker** runs before any reasoning and converts knowledge gaps into explicit experimental guidance. This is one of the most immediately practical components because it provides value even when the hypothesis ranking itself is uncertain.
+
+The **Bidirectional Reasoning Engine** traverses the knowledge graph in both the forward direction (signal to chromatin) and the reverse direction (chromatin to signal) simultaneously, applying the parameter constraints and cross-parameter interaction rules at each step.
+
+The **Scoring Framework** integrates Bayesian joint probability scoring with conformal prediction and entropy balancing to produce calibrated confidence guarantees. Shannon entropy of the hypothesis score distribution quantifies the remaining ambiguity and directly determines the information gain ranking of experimental recommendations.
+
+---
+
+## Current status
+
+This repository contains the architectural framework, the design documentation, and the conceptual basis for the system. Implementation of the core reasoning pipeline is the planned next phase. The architectural design has gone through substantial critical revision, including the transition from a categorical parameter system to a probability distribution model, the identification of cross-parameter interaction encoding as a distinct architectural requirement, and the scoping decision to restrict initial coverage to human and Drosophila to prioritise depth over breadth.
 
 ---
 
 ## Future directions
 
-**Near term**: Implementation of the core reasoning pipeline for human and Drosophila; integration with PhosphoSitePlus, FlyBase, ENCODE, and 4DN databases; retrospective validation against landmark chromatin biology papers
+The near-term implementation target is a prompt-based reasoning agent for human and Drosophila chromatin biology, validated retrospectively against published landmark papers in the field and prospectively through experimental predictions from my own lab work.
 
-**Medium term**: Single-cell multi-omics integration replacing categorical parameters with probability distributions learned from scCUT&TAG + scRNA-seq data; expanded organism coverage
+The medium-term direction is replacing the manually curated knowledge graph nodes with learned chromatin state embeddings trained on single-cell multi-omics data, which would allow the parameter system to grow beyond what manual curation can enumerate.
 
-**Long term**: Integration with Vector2Variant (Sooknah et al. 2026) for automated GWAS locus to chromatin mechanism reasoning; dynamic chromatin state modelling using ODE systems; prospective wet-lab validation pipeline with prior updating from experimental feedback
+The longer-term direction includes integration with the Vector2Variant tool (Sooknah et al. 2026) for automated reasoning from GWAS loci to chromatin mechanisms, and a prospective validation pipeline where experimental results from the Tariq Lab update the system's priors in a structured feedback loop.
 
-Target publication: Genome Biology, Nucleic Acids Research, or Nature Methods
+---
+
+## Repository contents
+
+```
+architecture/
+    EpiSignal_Architecture_Document_v1.md
+    system_prompt_v1.md
+
+framework/
+    parameter_framework.md
+    knowledge_graph_design.md
+    scoring_framework.md
+
+figures/
+    architecture_blueprint.svg
+
+README.md
+```
 
 ---
 
@@ -137,5 +107,5 @@ Target publication: Genome Biology, Nucleic Acids Research, or Nature Methods
 
 Mujtaba Ahmed
 MS in Biology, LUMS
-Tariq Lab — Epigenetics and Chromatin Biology
+Tariq Lab, Epigenetics and Chromatin Biology
 22140008@lums.edu.pk
