@@ -90,18 +90,11 @@ The longer-term direction includes integration with the Vector2Variant tool (Soo
 
 ```
 architecture/
-    EpiSignal_Architecture_Document_v1.md
-    system_prompt_v1.md
-
-framework/
-    parameter_framework.md
-    knowledge_graph_design.md
-    scoring_framework.md
-
+    ,EpiSignal_Architecture_Document_v1.md,
 figures/
-    architecture_blueprint.svg
-
-README.md
+    ,architecture_blueprint.svg,
+,EpiSignal_Build_Prompt.md,
+,README.md,
 ```
 
 ---
